@@ -1,4 +1,5 @@
-wait(3)
+repeat wait() until game:IsLoaded()
+        wait(2)
 print("Hello World!")
 
 game.Players.LocalPlayer.OnTeleport:Connect(function(State)
