@@ -1,3 +1,4 @@
+wait(3)
 print("Hello World!")
 
 game.Players.LocalPlayer.OnTeleport:Connect(function(State)
