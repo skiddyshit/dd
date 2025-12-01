@@ -119,7 +119,7 @@ end
 end)
 users[speaker] = true
 game.Players.LocalPlayer.OnTeleport:Connect(function(State)
-    local script_url = ""
+    local script_url = "https://raw.githubusercontent.com/skiddyshit/dd/refs/heads/main/dla"
     queue_on_teleport('loadstring(game:HttpGet("' .. script_url .. '"))()')
 end)
 end
