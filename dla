@@ -4,7 +4,6 @@ getgenv().users = {}
 
 local queueteleport = queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport)
 
-
 local speaker = game.Players.LocalPlayer
 if not users[speaker] then
 Services = setmetatable({}, {
