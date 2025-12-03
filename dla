@@ -158,7 +158,7 @@ pcall(__main)
 -- Auto-rejoin loop (persists because autoexec re-runs on relaunch)
 spawn(function()
     while true do
-        wait(2)  -- 1 hour 5 minutes
+        wait(60 * 63)  -- 1 hour 3 minutes
         pcall(function()
             print("🔄 Auto-rejoining...")
             TeleportService:Teleport(PlaceId, LocalPlayer)
