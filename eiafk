@@ -1,0 +1,171 @@
+if not game:IsLoaded() then game.Loaded:Wait() end
+wait(1)
+getgenv().users = {}
+
+local queueteleport = queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport)
+
+local speaker = game.Players.LocalPlayer
+if not users[speaker] then
+Services = setmetatable({}, {
+    __index = function(self, name)
+        local success, cache = pcall(function()
+            return cloneref(game:GetService(name))
+        end)
+        if success then
+            rawset(self, name, cache)
+            return cache
+        else
+            error("Invalid Service: " .. tostring(name))
+        end
+    end
+})
+
+task.spawn(function()
+speaker.Idled:Connect(function()
+    Services.VirtualUser:CaptureController()
+    Services.VirtualUser:ClickButton2(Vector2.new())
+end)
+end)
+
+task.spawn(function()
+
+local lp = game.Players.LocalPlayer
+local lpgui = lp.PlayerGui 
+
+local a = lpgui.AlphaGui.GameContainer.GameArea.Items
+
+getgenv().Autoemoji = true 
+
+while Autoemoji do task.wait()
+    for k, x in next, a:GetChildren() do 
+        x.Transparency = 1
+        x.Size = UDim2.new(10,0, 10, 0)
+    end
+end
+end)
+
+task.spawn(function()
+local lp = game.Players.LocalPlayer
+
+local cg = game.CoreGui 
+
+local ch = cg.ExperienceChat.appLayout.chatWindow.scrollingView.bottomLockedScrollView.RCTScrollView.RCTScrollContentView 
+
+local function findansw()
+    local newest = -math.huge
+    local btcho
+
+    for k, x in next, ch:children() do 
+        if x:IsA("Frame") then 
+            local bt = x.TextMessage.BodyText
+            if bt.Text:find("What is") then 
+                if bt.AbsolutePosition.Y > newest then 
+                    newest = bt.AbsolutePosition.Y
+                    btcho = bt 
+                end 
+            end 
+        end 
+    end
+    local evd = 0
+    pcall(function()
+    local a,b = btcho.Text:find"What is "
+    local ev = string.sub(btcho.Text,b,b+14)
+    local c = ev:find("?")
+    local res = string.sub(ev, 2, c-1)
+    evd = loadstring("return "..res)()
+    end)
+    return evd
+end 
+local rem = game.ReplicatedStorage.RemoteEvents.AnswerChatMathsQuestion
+rem:FireServer(findansw())
+ch.ChildAdded:Connect(function(child)
+    task.wait(1.5 + math.random())
+    rem:FireServer(findansw())
+end)
+end)
+
+task.spawn(function()
+getgenv().AutoCollectDrops = true 
+local lp = game.Players.LocalPlayer
+local lpgui = lp.PlayerGui 
+--if lp.Name == "frogl8" then
+local a = lpgui.AlphaGui.Drops
+
+while AutoCollectDrops do task.wait()
+    local num = #a:children() 
+    if num ~= 3 then 
+        for k, x in next, a:children() do 
+            if x:IsA("ImageButton") then 
+                game:GetService("ReplicatedStorage").RemoteEvents.CollectDrop:FireServer(x.Name)
+            end 
+        end 
+    end
+end
+--end
+end)
+
+task.spawn(function()
+getgenv().autoptreward = true 
+
+local rf = game.ReplicatedStorage.RemoteFunctions.ClaimPlayTimeReward
+--if game.Players.LocalPlayer.Name == "frogl8" then 
+while autoptreward do task.wait(1)
+    for k = 1, 12 do 
+        rf:InvokeServer("Reward"..k) 
+    end
+end
+--end
+end)
+getgenv().users[speaker] = true
+
+
+local TeleportCheck = false
+game.Players.LocalPlayer.OnTeleport:Connect(function(State)
+	if (not TeleportCheck) and queueteleport then
+		TeleportCheck = true
+		queueteleport("loadstring(game:HttpGet'https://raw.githubusercontent.com/skiddyshit/dd/refs/heads/main/dlaa')()")
+	end
+end)
+
+
+pcall(function()
+loadstring([[
+local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local PlaceId = game.PlaceId
+
+-- YOUR MAIN FUNCTION - Replace the contents with your script!
+function __main()
+    -- Example: Load a remote script or paste your code here
+    -- loadstring(game:HttpGet("https://raw.githubusercontent.com/yourusername/yourscript/main.lua"))()
+    
+    -- Placeholder example:
+    print("🟢 __main() executed successfully!")
+    -- Add your infinite loops, farms, etc. here
+    -- e.g., while true do wait(1) game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(0,50,0) end
+end
+
+-- Wait for game to fully load before running __main
+repeat
+    wait(0.1)
+until game:IsLoaded() and LocalPlayer:FindFirstChild("PlayerGui") and LocalPlayer.Parent
+
+-- Execute __main immediately
+pcall(__main)
+
+-- Auto-rejoin loop (persists because autoexec re-runs on relaunch)
+spawn(function()
+    while true do
+        wait(60 * 63)  -- 1 hour 3 minutes
+        pcall(function()
+            print("🔄 Auto-rejoining...")
+            TeleportService:Teleport(PlaceId, LocalPlayer)
+        end)
+    end
+end)
+
+print("🚀 Auto-rejoin script loaded! Rejoins every 1h5m and runs __main on each join.")]])()
+end)
+
+end
